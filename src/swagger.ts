@@ -69,6 +69,29 @@ const options: swaggerJSDoc.Options = {
             },
           },
         },
+        User: {
+          type: 'object',
+          required: ['username', 'email'],
+          properties: {
+            id: {
+              type: 'integer',
+              description: 'The auto-generated id of the user',
+            },
+            username: {
+              type: 'string',
+              description: 'The username of the user',
+            },
+            email: {
+              type: 'string',
+              format: 'email',
+              description: 'The email address of the user',
+            },
+            createdAt: {
+              type: 'string',
+              description: 'The date the user was created',
+            },
+          },
+        },
         Error: {
           type: 'object',
           properties: {

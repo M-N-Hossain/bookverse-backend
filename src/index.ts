@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
+import authRoutes from './routes/authRoutes';
 import bookRoutes from './routes/bookRoutes';
 import genreRoutes from './routes/genreRoutes';
 import { specs } from './swagger';
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
 app.use('/api/genres', genreRoutes);
 

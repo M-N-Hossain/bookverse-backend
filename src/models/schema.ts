@@ -1,5 +1,5 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const genres = sqliteTable('genres', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -16,5 +16,15 @@ export const books = sqliteTable('books', {
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
+export const users = sqliteTable('users', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  username: text('username').notNull().unique(),
+  email: text('email').notNull().unique(),
+  password: text('password').notNull(),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
 export type Genre = typeof genres.$inferSelect;
 export type Book = typeof books.$inferSelect;
+export type User = typeof users.$inferSelect;
+export type NewUser = Omit<User, 'id' | 'createdAt'>;
