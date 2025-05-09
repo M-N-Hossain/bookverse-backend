@@ -31,7 +31,8 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/', getAllGenres);
+
+router.get('/', getAllGenres as express.RequestHandler);
 
 /**
  * @swagger
@@ -66,7 +67,7 @@ router.get('/', getAllGenres);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getGenreById);
+router.get('/:id', getGenreById as express.RequestHandler);
 
 /**
  * @swagger
@@ -110,7 +111,7 @@ router.get('/:id', getGenreById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createGenre);
+router.post('/', createGenre as express.RequestHandler);
 
 /**
  * @swagger
@@ -161,7 +162,7 @@ router.post('/', createGenre);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', updateGenre);
+router.put('/:id', updateGenre as express.RequestHandler);
 
 /**
  * @swagger
@@ -198,6 +199,6 @@ router.put('/:id', updateGenre);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteGenre);
+router.delete('/:id', deleteGenre as express.RequestHandler);
 
 export default router; 

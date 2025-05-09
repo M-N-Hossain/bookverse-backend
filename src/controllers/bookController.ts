@@ -1,7 +1,9 @@
-import { eq, like } from 'drizzle-orm';
+import { eq, like, SQL } from 'drizzle-orm';
 import { Request, Response } from 'express';
 import { db } from '../db/database';
 import { books, genres } from '../models/schema';
+
+type BookStatus = 'to_read' | 'in_progress' | 'read';
 
 // Get all books
 export const getAllBooks = async (req: Request, res: Response) => {
@@ -11,7 +13,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
       .leftJoin(genres, eq(books.genreId, genres.id));
       
     // Transform to a more client-friendly format
-    const formattedBooks = result.map(row => ({
+    const formattedBooks = result.map((row: any) => ({
       id: row.books.id,
       title: row.books.title,
       author: row.books.author,
@@ -45,7 +47,7 @@ export const getBookById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Book not found' });
     }
     
-    const book = result[0];
+    const book = result[0] as any;
     const formattedBook = {
       id: book.books.id,
       title: book.books.title,
@@ -86,7 +88,7 @@ export const createBook = async (req: Request, res: Response) => {
       title,
       author,
       genreId,
-      status,
+      status: status as BookStatus | undefined,
       coverImage
     }).returning();
     
@@ -124,7 +126,7 @@ export const updateBook = async (req: Request, res: Response) => {
         title: title || existingBook[0].title,
         author: author || existingBook[0].author,
         genreId: genreId || existingBook[0].genreId,
-        status: status || existingBook[0].status,
+        status: (status as BookStatus) || existingBook[0].status,
         coverImage: coverImage !== undefined ? coverImage : existingBook[0].coverImage
       })
       .where(eq(books.id, parseInt(id)))
@@ -166,27 +168,29 @@ export const deleteBook = async (req: Request, res: Response) => {
 export const searchBooks = async (req: Request, res: Response) => {
   try {
     const { query, status, genreId } = req.query;
-    let query_builder = db.select()
-      .from(books)
-      .leftJoin(genres, eq(books.genreId, genres.id));
+    let conditions: SQL[] = [];
     
-    // Apply filters
+    // Build conditions array
     if (query) {
-      query_builder = query_builder.where(like(books.title, `%${query}%`));
+      conditions.push(like(books.title, `%${query}%`));
     }
     
     if (status) {
-      query_builder = query_builder.where(eq(books.status, status as string));
+      conditions.push(eq(books.status, status as BookStatus));
     }
     
     if (genreId) {
-      query_builder = query_builder.where(eq(books.genreId, parseInt(genreId as string)));
+      conditions.push(eq(books.genreId, parseInt(genreId as string)));
     }
     
-    const result = await query_builder;
+    // Execute query with all conditions
+    const result = await db.select()
+      .from(books)
+      .leftJoin(genres, eq(books.genreId, genres.id))
+      .where(conditions.length > 0 ? conditions[0] : undefined);
     
     // Transform to a more client-friendly format
-    const formattedBooks = result.map(row => ({
+    const formattedBooks = result.map((row: any) => ({
       id: row.books.id,
       title: row.books.title,
       author: row.books.author,

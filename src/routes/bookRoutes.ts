@@ -32,7 +32,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/', getAllBooks);
+router.get('/', getAllBooks as express.RequestHandler);
 
 /**
  * @swagger
@@ -73,7 +73,7 @@ router.get('/', getAllBooks);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/search', searchBooks);
+router.get('/search', searchBooks as express.RequestHandler);
 
 /**
  * @swagger
@@ -108,7 +108,7 @@ router.get('/search', searchBooks);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getBookById);
+router.get('/:id', getBookById as express.RequestHandler);
 
 /**
  * @swagger
@@ -155,7 +155,7 @@ router.get('/:id', getBookById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createBook);
+router.post('/', createBook as express.RequestHandler);
 
 /**
  * @swagger
@@ -214,7 +214,7 @@ router.post('/', createBook);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', updateBook);
+router.put('/:id', updateBook as express.RequestHandler);
 
 /**
  * @swagger
@@ -245,6 +245,6 @@ router.put('/:id', updateBook);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteBook);
+router.delete('/:id', deleteBook as express.RequestHandler);
 
 export default router; 
