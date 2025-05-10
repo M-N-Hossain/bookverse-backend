@@ -7,6 +7,7 @@ import {
     searchBooks,
     updateBook
 } from '../controllers/bookController';
+import verifyUser from '../middleware/verifyUser';
 
 const router = express.Router();
 
@@ -73,7 +74,7 @@ router.get('/', getAllBooks as express.RequestHandler);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/search', searchBooks as express.RequestHandler);
+router.get('/search', verifyUser as express.RequestHandler, searchBooks as express.RequestHandler);
 
 /**
  * @swagger
@@ -108,7 +109,7 @@ router.get('/search', searchBooks as express.RequestHandler);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', getBookById as express.RequestHandler);
+router.get('/:id', verifyUser as express.RequestHandler, getBookById as express.RequestHandler);
 
 /**
  * @swagger
@@ -155,7 +156,7 @@ router.get('/:id', getBookById as express.RequestHandler);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/', createBook as express.RequestHandler);
+router.post('/', verifyUser as express.RequestHandler, createBook as express.RequestHandler);
 
 /**
  * @swagger
@@ -214,7 +215,7 @@ router.post('/', createBook as express.RequestHandler);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', updateBook as express.RequestHandler);
+router.put('/:id', verifyUser as express.RequestHandler, updateBook as express.RequestHandler);
 
 /**
  * @swagger
@@ -245,6 +246,6 @@ router.put('/:id', updateBook as express.RequestHandler);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', deleteBook as express.RequestHandler);
+router.delete('/:id', verifyUser as express.RequestHandler, deleteBook as express.RequestHandler);
 
 export default router; 

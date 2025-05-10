@@ -1,4 +1,5 @@
 import cors from 'cors';
+import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import authRoutes from './routes/authRoutes';

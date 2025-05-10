@@ -1,6 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { eq, or } from "drizzle-orm";
 import { Request, Response } from "express";
+import jwt from 'jsonwebtoken';
 import { db } from "../db/database";
 import { NewUser, users } from "../models/schema";
 
@@ -61,9 +62,13 @@ export const loginUser = async (req: Request, res: Response) => {
         }
 
         // Generate a JWT token
-        // const token = jwt.sign({ userId: user[0].id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jwt.sign({ userId: user[0].id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ token: '123' });
+        res.status(200).json({ token });
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ error: 'Failed to login' });
