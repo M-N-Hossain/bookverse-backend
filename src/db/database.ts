@@ -3,7 +3,7 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import path from 'path';
 
 // Create a database connection
-const sqlite = new Database(path.join(__dirname, '../../db/bookverse.db'));
+const sqlite = new Database(path.join(__dirname, '../../database/bookverse.db'));
 
 // Create a Drizzle ORM instance
 export const db = drizzle(sqlite);
